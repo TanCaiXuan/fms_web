@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div style="margin-left: 20px; margin-right: 20px;">
+        <h2>Road Reports</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Road Report ID</th>
+                    <th>Location</th>
+                    <th>Reason</th>
+                    <th>Timestamp</th>
+                    <th>User ID</th>
+                    <th>Image</th>
+                    <th>Status Of Approved</th>
+                    <th>Approval</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in road_reports %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>  <!-- This will display the count of each row -->
+                        <td>{{ report.road_rep_id }}</td>
+                        <td>{{ report.location }}</td>
+                        <td>{{ report.reason }}</td>
+                        <td>{{ report.timestamp }}</td>
+                        <td>{{ report.user_id }}</td>
+                        <td>
+                            {% if report.image_url %}
+                                <img src="{{ report.image_url }}" alt="Road Report Image" width="150" />
+                            {% else %}
+                                No image available
+                            {% endif %}
+                        </td>
+                        <td>{{ report.statusOfApproved }}</td>
+                        <td>
+                            <form method="POST" action="{% url 'approve_report' report.road_rep_id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success">Approve</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="GET" action="{% url 'edit_report' report.road_rep_id %}">
+                                <button type="submit" class="btn btn-warning">Edit</button>
+                            </form>
+                           
+                        </td>
+                        <td>
+                            <form method="GET" action="{% url 'delete_report' report.road_rep_id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="9">No road reports found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

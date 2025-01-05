@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h2>Members</h2>
+
+        <div class="row">
+            {% for member in members %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>{{ member.name }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Member ID:</strong> {{ member.member_id }}</p>
+                            <p><strong>Gender:</strong> {{ member.gender }}</p>
+                            <p><strong>Position:</strong> {{ member.position }}</p>
+                            <p><strong>Phone Number:</strong> {{ member.phone_number }}</p>
+                            <p><strong>Birthday:</strong> {{ member.birthday }}</p>
+                            <p><strong>IC Number:</strong> {{ member.ic_number }}</p>
+                            <p><strong>Medical History:</strong> {{ member.medical_history }}</p>
+                            <p><strong>Nationality:</strong> {{ member.nationality }}</p>
+                            <p><strong>Passport Number:</strong> {{ member.passportNum }}</p>
+                            <p><strong>Race:</strong> {{ member.race }}</p>
+                            <p><strong>Address:</strong> {{ member.address }}</p>
+                            <p><strong>Timestamp:</strong> {{ member.timestamp }}</p>
+                            <p><strong>User ID:</strong> {{ member.user_id }}</p>
+                            <p><strong>Group ID:</strong> {{ member.grp_id }}</p>
+
+                            <div class="d-flex justify-content-between mt-3">
+                                <!-- Edit Button -->
+                                <form method="GET" action="{% url 'edit_member' member.member_id %}" style="display:inline;">
+                                    <button type="submit" class="btn btn-warning">Edit</button>
+                                </form>
+
+                                <!-- Delete Button -->
+                                <form method="GET" action="{% url 'delete_member' member.member_id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No members found.</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Group</title>
+    <style>
+        .edit-group-form {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .edit-group-form .form-group {
+            margin-bottom: 20px;
+            margin-right: 2px;
+        }
+
+        .edit-group-form label {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .edit-group-form .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .edit-group-form .form-control:focus {
+            border-color: #0056b3;
+            box-shadow: 0 0 8px rgba(0, 86, 179, 0.2);
+        }
+
+        .edit-group-form .btn {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .edit-group-form .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .edit-group-form .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .edit-group-form .form-actions {
+            text-align: center;
+        }
+
+        .edit-group-form .btn-submit {
+            background-color: #28a745;
+        }
+
+        .edit-group-form .btn-submit:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <form method="POST" class="edit-group-form">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="grp_name">Group Name:</label>
+            <input class="form-control" type="text" id="grp_name" name="grp_name" value="{{ group.grp_name }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="leader_id">Leader ID:</label>
+            <input class="form-control" type="text" id="leader_id" name="leader_id" value="{{ group.leader_id }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="location">Location:</label>
+            <input class="form-control" type="text" id="location" name="location" value="{{ group.location }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="member_ids">Member IDs:</label>
+            <textarea class="form-control" id="member_ids" name="member_ids" rows="5">{{ group.member_ids|join:", " }}</textarea>
+            <small>Enter member IDs separated by commas.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="status_of_approved">Status of Approval:</label>
+            <select class="form-control" id="status_of_approved" name="status_of_approved">
+                <option value="true" {% if group.statusOfApproved == 'true' %}selected{% endif %}>Approved</option>
+                <option value="false" {% if group.statusOfApproved == 'false' %}selected{% endif %}>Not Approved</option>
+            </select>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-submit">Save Changes</button>
+        </div>
+    </form>
+
+</body>
+</html>

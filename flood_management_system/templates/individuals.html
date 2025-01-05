@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Individual Reports{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Individual Reports</h1>
+
+    <div class="row">
+        {% for individual in individuals %}
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    {{ individual.name }}
+                </div>
+                <div class="card-body">
+                    <p><strong>ID:</strong> {{ individual.indivId }}</p>
+                    <p><strong>Gender:</strong> {{ individual.gender }}</p>
+                    <p><strong>Birthday:</strong> {{ individual.birthday }}</p>
+                    <p><strong>IC Number:</strong> {{ individual.ic_number }}</p>
+                    <p><strong>Phone Number:</strong> {{ individual.phone_number }}</p>
+                    <p><strong>Location:</strong> {{ individual.location }}</p>
+                    <p><strong>Address:</strong> {{ individual.address }}</p>
+                    <p><strong>Medical History:</strong> {{ individual.medical_history|default:"N/A" }}</p>
+                    <p><strong>Status of Approval:</strong>
+                        {% if individual.statusOfApproved == "true" %}
+                            Approved
+                        {% else %}
+                            Not Approved
+                        {% endif %}
+                    </p>
+                    <p><strong>User ID:</strong> {{ individual.user_id }}</p>
+                    <p><strong>Nationality:</strong> {{ individual.nationality }}</p>
+                    <p><strong>Passport Number:</strong> {{ individual.passportNum }}</p>
+                    <p><strong>Race:</strong> {{ individual.race }}</p>
+                    <p><strong>Timestamp:</strong> {{ individual.timestamp }}</p>
+
+                    <div class="d-flex justify-content-between">
+                        <div class="button-container">
+                            {% if individual.statusOfApproved == "false" %}
+                                <a href="{% url 'approve_individual' indivId=individual.indivId %}" class="btn btn-success">Approve</a>
+                            {% else %}
+                                <span class="text-success">Approved</span>
+                            {% endif %}
+                        </div>
+                    
+                        <div class="button-container">
+                            <a href="{% url 'edit_individual' indivId=individual.indivId %}" class="btn btn-warning">Edit</a>
+                        </div>
+                    
+                        <div class="button-container">
+                            <form method="POST" action="{% url 'delete_individual' indivId=individual.indivId %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No individual reports available.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

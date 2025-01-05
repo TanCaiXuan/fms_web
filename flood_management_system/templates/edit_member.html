@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h2>Edit Member: {{ member.name }}</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- Hidden field for Member ID -->
+            <input type="hidden" name="member_id" value="{{ member.member_id }}">
+
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ member.name }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="birthday">Birthday:</label>
+                <input type="date" class="form-control" id="birthday" name="birthday" value="{{ member.birthday }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select class="form-control" id="gender" name="gender" required>
+                    <option value="Male" {% if member.gender == "Male" %}selected{% endif %}>Male</option>
+                    <option value="Female" {% if member.gender == "Female" %}selected{% endif %}>Female</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="position">Position:</label>
+                <input type="text" class="form-control" id="position" name="position" value="{{ member.position }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone_number">Phone Number:</label>
+                <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ member.phone_number }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="ic_number">IC Number:</label>
+                <input type="text" class="form-control" id="ic_number" name="ic_number" value="{{ member.ic_number }}">
+            </div>
+
+            <div class="form-group">
+                <label for="medical_history">Medical History:</label>
+                <input type="text" class="form-control" id="medical_history" name="medical_history" value="{{ member.medical_history }}">
+            </div>
+
+            <div class="form-group">
+                <label for="nationality">Nationality:</label>
+                <input type="text" class="form-control" id="nationality" name="nationality" value="{{ member.nationality }}">
+            </div>
+
+            <div class="form-group">
+                <label for="passportNum">Passport Number:</label>
+                <input type="text" class="form-control" id="passportNum" name="passportNum" value="{{ member.passportNum }}">
+            </div>
+
+            <div class="form-group">
+                <label for="race">Race:</label>
+                <input type="text" class="form-control" id="race" name="race" value="{{ member.race }}">
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <textarea class="form-control" id="address" name="address" rows="4">{{ member.address }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="timestamp">Timestamp:</label>
+                <input type="text" class="form-control" id="timestamp" name="timestamp" value="{{ member.timestamp }}" disabled>
+            </div>
+
+            <div class="form-group">
+                <label for="user_id">User ID:</label>
+                <input type="text" class="form-control" id="user_id" name="user_id" value="{{ member.user_id }}" disabled>
+            </div>
+
+            <div class="form-group">
+                <label for="grp_id">Group ID:</label>
+                <input type="text" class="form-control" id="grp_id" name="grp_id" value="{{ member.grp_id }}">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="{% url 'members' %}" class="btn btn-secondary ml-2">Cancel</a>
+        </form>
+
+        
+    </div>
+{% endblock %}

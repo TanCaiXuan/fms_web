@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h2>Edit Individual: {{ individual.name }}</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- Hidden field for Individual ID -->
+            <input type="hidden" name="indivId" value="{{ individual.indivId }}">
+
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ individual.name }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="birthday">Birthday:</label>
+                <input type="date" class="form-control" id="birthday" name="birthday" value="{{ individual.birthday }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select class="form-control" id="gender" name="gender" required>
+                    <option value="Male" {% if individual.gender == "Male" %}selected{% endif %}>Male</option>
+                    <option value="Female" {% if individual.gender == "Female" %}selected{% endif %}>Female</option>
+                    <option value="Other" {% if individual.gender == "Other" %}selected{% endif %}>Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="phone_number">Phone Number:</label>
+                <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ individual.phoneNumber }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="ic_number">IC Number:</label>
+                <input type="text" class="form-control" id="ic_number" name="ic_number" value="{{ individual.ic_number }}">
+            </div>
+
+            <div class="form-group">
+                <label for="medical_history">Medical History:</label>
+                <input type="text" class="form-control" id="medical_history" name="medical_history" value="{{ individual.medical_history }}">
+            </div>
+
+            <div class="form-group">
+                <label for="nationality">Nationality:</label>
+                <input type="text" class="form-control" id="nationality" name="nationality" value="{{ individual.nationality }}">
+            </div>
+
+            <div class="form-group">
+                <label for="passportNum">Passport Number:</label>
+                <input type="text" class="form-control" id="passportNum" name="passport_num" value="{{ individual.passportNum }}">
+            </div>
+
+            <div class="form-group">
+                <label for="race">Race:</label>
+                <input type="text" class="form-control" id="race" name="race" value="{{ individual.race }}">
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location:</label>
+                <input type="text" class="form-control" id="location" name="location" value="{{ individual.location }}">
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <textarea class="form-control" id="address" name="address" rows="4">{{ individual.address }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="status_of_approved">Status of Approval:</label>
+                <select class="form-control" id="status_of_approved" name="status_of_approved">
+                    <option value="true" {% if individual.statusOfApproved == "true" %}selected{% endif %}>Approved</option>
+                    <option value="false" {% if individual.statusOfApproved == "false" %}selected{% endif %}>Not Approved</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="timestamp">Timestamp:</label>
+                <input type="text" class="form-control" id="timestamp" name="timestamp" value="{{ individual.timestamp }}" disabled>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="{% url 'individuals' %}" class="btn btn-secondary ml-2">Cancel</a>
+        </form>
+
+    </div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div style="margin-left: 20px; margin-right: 20px;">
+        <h2>Groups</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Group ID</th>
+                    <th>Group Name</th>
+                    <th>Leader ID</th>
+                    <th>Location</th>
+                    <th>Member IDs</th>
+                    <th>Timestamp</th>
+                    <th>User ID</th>
+                    <th>Status Of Approved</th>
+                    <th>Approval</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for group in groups %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>  
+                        <td>{{ group.grp_id }}</td>
+                        <td>{{ group.grp_name }}</td>
+                        <td>{{ group.leader_id }}</td>
+                        <td>{{ group.location }}</td>
+                        <td>
+                            {% if group.member_ids %}
+                                <ul>
+                                    {% for member in group.member_ids %}
+                                        <li>{{ member }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                No members available
+                            {% endif %}
+                        </td>
+                        <td>{{ group.timestamp }}</td>
+                        <td>{{ group.user_id }}</td>
+                        <td>{{ group.statusOfApproved }}</td>
+                        
+                        <td>
+                            <form method="POST" action="{% url 'approve_group' group.grp_id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success">Approve</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="GET" action="{% url 'edit_group' group.grp_id %}" style="display:inline;">
+                                <button type="submit" class="btn btn-warning">Edit</button>
+                            </form>                         
+                        </td>
+                        <td>
+                            <form method="GET" action="{% url 'delete_group' group.grp_id %}" style="display:inline;">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="12">No groups found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -225,33 +225,48 @@ def read_all_members():
 
     return members
 
+from datetime import datetime
+
 def edit_member(request, member_id):
     # Fetch the member from Firestore
     member_ref = db.collection('member_details').document(member_id)
     member = member_ref.get()
 
     if not member.exists:
-        return redirect('members')  # Redirect if the member doesn't exist
-
+        return redirect('members')  
+    
     member_data = member.to_dict()
-
-    # Format the birthday field if it's a datetime object
+    
     if member_data.get('birthday'):
         try:
-            # If the birthday is a string, we may need to convert it to datetime and then to string in the format 'YYYY-MM-DD'
-            birthday = member_data['birthday']
-            if isinstance(birthday, str):
-                birthday = datetime.strptime(birthday, '%m/%d/%Y')  # Adjust the format if necessary
-            member_data['birthday'] = birthday.strftime('%Y-%m-%d')  # Format it as 'YYYY-MM-DD'
+            birthday_str = member_data['birthday'] 
+            
+            # Convert to datetime object if it's not already
+            if isinstance(birthday_str, str):
+                parsed_birthday = datetime.strptime(birthday_str, '%d/%m/%Y')
+                # Convert to the format yyyy-mm-dd
+                member_data['birthday'] = parsed_birthday.strftime('%Y-%m-%d')
         except ValueError:
-            # If conversion fails, keep it as is (or handle appropriately)
+            # Handle invalid date format gracefully
             pass
 
+        
+    formatted_birthday = None
+    
     if request.method == 'POST':
+
+        birthday =  request.POST.get('birthday')
+                
+        parsed_date = datetime.strptime(birthday, '%Y-%m-%d')
+                
+               
+        formatted_birthday = parsed_date.strftime('%d/%m/%Y')
+        
+        print(request.POST)
         updated_data = {
             'address': request.POST.get('address'),  
             'name': request.POST.get('name'),
-            'birthday': request.POST.get('birthday'),
+            'birthday': formatted_birthday, 
             'gender': request.POST.get('gender'),
             'grp_id': request.POST.get('grp_id'),
             'ic_number': request.POST.get('ic_number'),
@@ -262,10 +277,7 @@ def edit_member(request, member_id):
             'phone_number': request.POST.get('phone_number'),
             'position': request.POST.get('position'),
             'race': request.POST.get('race'),
-            'timestamp': request.POST.get('timestamp'),
-            'user_id': request.POST.get('user_id'),
-            
-           }
+               }
 
         # Update Firestore document
         member_ref.update(updated_data)
@@ -274,16 +286,15 @@ def edit_member(request, member_id):
 
     return render(request, 'edit_member.html', {'member': member_data})
 
+
 def format_birthday(birthday):
     if birthday:
         try:
-            # Try to convert the string to a datetime object
             if isinstance(birthday, str):
-                birthday = datetime.strptime(birthday, '%m/%d/%Y')  # Adjust format if needed
-            return birthday.strftime('%m/%d/%Y')  # Return formatted date
+                birthday = datetime.strptime(birthday, '%d/%m/%Y') 
+            return birthday.strftime('%d/%m/%Y')  
         except ValueError:
-            # In case the string is not in the expected format, just return it as is
-            return birthday
+           return birthday
     return None  
 
 # Delete a group and its associated members
@@ -356,9 +367,9 @@ def read_individual():
             'user_id': doc.get('user_id'),
             'statusOfApproved': doc.get('statusOfApproved'),
             'address': doc.get('address'),
-            'birthday': doc.get('birthday'),
+            'birthday': format_birthday(doc.get('birthday')),
             'gender': doc.get('gender'),
-            'icNumber': doc.get('ic_number'),
+            'ic_number': doc.get('ic_number'),
             'indivId': doc.get('indivId'),
             'location': doc.get('location'),
             'medical_history': doc.get('medical_history'),
@@ -385,7 +396,7 @@ def approve_individual(request, indivId):
 
     if report.exists:
         # Update the 'statusOfApproved' field to 'true'
-        indiv_ref.update({'statusOfApproved': True})
+        indiv_ref.update({'statusOfApproved': 'true'})
         
         # Redirect to the 'individuals' page
         return redirect('individuals')
@@ -400,36 +411,44 @@ def edit_individual(request, indivId):
         return redirect('individuals')  # Redirect if the individual doesn't exist
 
     individual_data = individual.to_dict()
-
-    # Format the birthday field if it's a datetime object
     if individual_data.get('birthday'):
         try:
-            # If the birthday is a string, convert it to datetime and then to string in the format 'YYYY-MM-DD'
-            birthday = individual_data['birthday']
-            if isinstance(birthday, str):
-                birthday = datetime.strptime(birthday, '%m/%d/%Y')  # Adjust the format if necessary
-            individual_data['birthday'] = birthday.strftime('%Y-%m-%d')  # Format as 'YYYY-MM-DD'
+            birthday_str = individual_data['birthday'] 
+            
+            # Convert to datetime object if it's not already
+            if isinstance(birthday_str, str):
+                parsed_birthday = datetime.strptime(birthday_str, '%d/%m/%Y')
+                # Convert to the format yyyy-mm-dd
+                individual_data['birthday'] = parsed_birthday.strftime('%Y-%m-%d')
         except ValueError:
-            # If conversion fails, keep it as is (or handle appropriately)
+            # Handle invalid date format gracefully
             pass
 
+    
     if request.method == 'POST':
-        # Collect updated data from the form
+        
+        birthday =  request.POST.get('birthday')
+                
+        parsed_date = datetime.strptime(birthday, '%Y-%m-%d')
+                
+               
+        formatted_birthday = parsed_date.strftime('%d/%m/%Y')
+
         updated_data = {
+                           
             'location': request.POST.get('location'),
             'address': request.POST.get('address'),
-            'birthday': request.POST.get('birthday'),
+            'birthday': formatted_birthday,
             'gender': request.POST.get('gender'),
             'ic_number': request.POST.get('ic_number'),
             'indivId': request.POST.get('indivId'),
             'medical_history': request.POST.get('medical_history'),
             'name': request.POST.get('name'),
             'nationality': request.POST.get('nationality'),
-            'passport_num': request.POST.get('passport_num'),
+            'passportNum': request.POST.get('passportNum'),
             'phone_number': request.POST.get('phone_number'),
             'race': request.POST.get('race'),
-            'status_of_approved': request.POST.get('status_of_approved') == 'true',  # Convert string to boolean
-            'timestamp': request.POST.get('timestamp')
+            'statusOfApproved': request.POST.get('statusOfApproved'),
         }
 
         # Update Firestore document with the new data
@@ -539,7 +558,7 @@ def plotAnalyzeOnAge():
             filtered_members.append(member)
             member_ages[age] = member_ages.get(age, 0) + 1
 
-    # Step 2: Calculate age for individuals
+    #Calculate age for individuals
     individual_ages = {}
     for individual in individuals:
         if 'ic_number' not in individual:

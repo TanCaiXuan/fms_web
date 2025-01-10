@@ -8,6 +8,17 @@ import json
 
 
 
+config={
+  'apiKey': "AIzaSyC2K-8XhD4GmMXIMlNnYP4vFpy_0Vp3nJA",
+  'authDomain': "fmsdb-e4283.firebaseapp.com",
+  'databaseURL': "https://fmsdb-e4283-default-rtdb.firebaseio.com",
+  'projectId': "fmsdb-e4283",
+  'storageBucket': "fmsdb-e4283.firebasestorage.app",
+  'messagingSenderId': "103372056660",
+  'appId': "1:103372056660:web:262807c1c3b118982925c1",
+  'measurementId': "G-Z85BTDYZ5V"
+}
+
 cred = credentials.Certificate('fmsdb-e4283-firebase-adminsdk-7jzkd-f40c56c494.json')
 auth = firebase.auth()
 
